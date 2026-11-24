@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { ToastContainer, toast } from 'react-toastify';
 import { useRef } from 'react'
 import AnimatedIcon from './AnimatedIcon'
 import Footer from './Footer'
@@ -9,7 +10,7 @@ const Manager = () => {
   const [passwordAraay, setPasswordArray] = useState([])
   const [error, setError] = useState("")
   const ShowPassword = () => {
-    alert("Are you sure you want to change the password ?")
+    alert("Are you sure you want to see the password ?")
     setToggleVisibility(!toggle_visibility)
   }
   const SavePassword = () => {
@@ -32,6 +33,20 @@ const Manager = () => {
     setForm({ ...form, [e.target.name]: e.target.value })
 
   }
+  const copyPassword = (copy) => {
+    navigator.clipboard.writeText(copy)
+    toast('Copied to Clipboard', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+     
+    });
+  }
   useEffect(() => {
 
     let pass = localStorage.getItem("passwords")
@@ -44,6 +59,19 @@ const Manager = () => {
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+     
+      />
       <div>
         <div className="absolute inset-0 -z-10 h-full w-full bg-green-50 bg-[linear-gradient(to_right,#22c55e0a_1px,transparent_1px),linear-gradient(to_bottom,#22c55e0a_1px,transparent_1px)] bg-[size:14px_24px]"></div>
       </div>
@@ -75,32 +103,52 @@ const Manager = () => {
         <div className="err text-red-700 text-sm text-center">
           {error}
         </div>
-        <div className='mx-4 font-semibold'>{passwordAraay.length === 0 && "No Passwords to display"}</div>
-       
-          {passwordAraay.length !== 0 && <table className="table-auto  rounded-lg overflow-hidden w-full mt-4">
-            <thead className='bg-green-500 '>
-              <tr>
-                <th>Site</th>
+        <div className='font-bold text-2xl py-4'>Your Passwords</div>
+        <div className='font-semibold'>{passwordAraay.length === 0 && "No Passwords to display"}</div>
+
+        {passwordAraay.length !== 0 &&
+
+          <table className="table-auto  rounded-lg overflow-hidden w-full mt-4">
+
+            <thead className='bg-green-700 border border-white'>
+              <tr >
+                <th className='py-1'>Site</th>
                 <th>Username</th>
                 <th>Password</th>
               </tr>
             </thead>
-             {passwordAraay.map((item) => {
-               return <tbody className='bg-green-100'>
-              <tr>
-                <td className='text-center'><a href={item.site} target='_blank'>{item.site}</a></td>
-                <td className='text-center'>{item.username}</td>
-                <td className='text-center'>{item.password}</td>
-              </tr>
+            {passwordAraay.map((item) => {
+              return <tbody className='bg-green-200'>
+                <tr>
+                  <td className='text-center py-2 w-32 border border-white'>
+                    <div className='flex justify-center gap-1'>
+                      <a href={item.site} target='_blank'>{item.site}</a>
+                      <img src="./public/copy.png" alt="copy" onClick={() => copyPassword(item.site)} className='cursor-pointer' />
+                    </div>
+                  </td>
 
-            </tbody>
-               })}
+                  <td className='text-center py-2 w-32 border border-white'>
+                    <div className='flex justify-center gap-1'>
+                      {item.username}
+                      <img src="./public/copy.png" alt="copy" onClick={() => copyPassword(item.username)} className='cursor-pointer' />
+                    </div>
+                  </td>
+                  <td className='text-center py-2 w-32 border border-white'>
+                    <div className='flex justify-center gap-1'>
+                      {item.password}
+                      <img src="./public/copy.png" alt="copy" onClick={() => copyPassword(item.password)} className='cursor-pointer' />
+                    </div>
+                  </td>
+                </tr>
+
+              </tbody>
+            })}
           </table>
-              }
-      
+        }
+
 
       </div>
-      <Footer/>
+      <Footer />
 
     </>
   )
