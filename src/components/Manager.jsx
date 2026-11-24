@@ -12,20 +12,19 @@ const Manager = () => {
     setToggleVisibility(!toggle_visibility)
   }
   const SavePassword = () => {
-    
-     if(form.site.length<=3 && form.username.length<=3 && form.password.length<=3){
+
+    if (form.site.length <= 3 || form.username.length <= 3 || form.password.length <= 3) {
       setError("Every field should contain more than 3 letters!")
-     }
-    
-     
-  
+    }
+
+
     else {
       setError("")
       setPasswordArray([...passwordAraay, form])
       localStorage.setItem("passwords", JSON.stringify([...passwordAraay, form]))
       console.log(passwordAraay)
       setForm({ site: "", username: "", password: "" })
-      
+
     }
   }
   const handleChange = (e) => {
@@ -69,15 +68,38 @@ const Manager = () => {
               <AnimatedIcon size={24} color="#13132f" /> <span>Add Password</span></button>
 
           </div>
-          
+
 
         </div>
         <div className="err text-red-700 text-sm text-center">
-            {error}
-          </div>
+          {error}
+        </div>
+        <div className='mx-4 font-semibold'>{passwordAraay.length === 0 && "No Passwords to display"}</div>
+       
+          {passwordAraay.length !== 0 && <table className="table-auto  rounded-lg overflow-hidden w-full mt-4">
+            <thead className='bg-green-500 '>
+              <tr>
+                <th>Site</th>
+                <th>Username</th>
+                <th>Password</th>
+              </tr>
+            </thead>
+             {passwordAraay.map((item) => {
+               return <tbody className='bg-green-100'>
+              <tr>
+                <td className='text-center'><a href={item.site} target='_blank'>{item.site}</a></td>
+                <td className='text-center'>{item.username}</td>
+                <td className='text-center'>{item.password}</td>
+              </tr>
 
+            </tbody>
+               })}
+          </table>
+              }
+      
 
       </div>
+
     </>
   )
 }
