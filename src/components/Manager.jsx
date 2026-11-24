@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useRef } from 'react'
 import AnimatedIcon from './AnimatedIcon'
+import Footer from './Footer'
 const Manager = () => {
 
   const [toggle_visibility, setToggleVisibility] = useState(0)
@@ -99,6 +100,7 @@ const Manager = () => {
       
 
       </div>
+      <Footer/>
 
     </>
   )
